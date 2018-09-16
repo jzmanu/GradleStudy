@@ -1,0 +1,6 @@
+println "---------test----Setting.gradle----------"
+//输出当前工程目录
+println(rootDir)
+//指定要参与构建的子项目
+include ':Method'
+project(':Method').projectDir = new File(rootDir,'test/Method')

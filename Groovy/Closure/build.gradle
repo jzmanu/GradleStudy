@@ -1,0 +1,94 @@
+//1.闭包及闭包的参数传递
+task closure{
+	//自定义闭包的执行
+	mEach{
+		println it
+	}
+	
+	//向闭包传递参数
+	mEachWithParams{m,n -> //m,n ->将闭包的参数和主体区分离开来
+		println "${m} is ${n}"
+	}
+}
+
+//1.定义一个方法，参数closure用于接收闭包
+//2.闭包的执行就是花括号里面代码的执行
+//3.闭包接收的参数就是闭包参数closure参数中的i，如果是一个参数默认就是it变量
+def mEach(closure){
+	for(int i in 1..5){
+		closure(i)
+	}
+}
+
+//向闭包传递参数
+def mEachWithParams(closure){
+	def map = ["name":"Groovy","age":10]
+	map.each{
+		closure(it.key, it.value)
+	}
+}
+
+//2. 闭包的委托
+
+task delegate{
+	new Delegate().test{
+		//Groovy闭包的三个属性：thisObject、owner、delegate
+		println "thisObject:${thisObject.getClass()}"
+		println "owner:${owner.getClass()}"
+		println "delegate:${delegate.getClass()}"
+		
+		//闭包默认it
+		println "闭包默认it:"+it.getClass()
+		
+		//定义的方法，优先使用thisObject来处理
+		method()
+		//闭包中的方法
+		it.method()
+	}
+}
+
+def method(){
+	println "mththod in root:${this.getClass()}"
+}
+
+class Delegate{
+	def method(){
+		println "mththod in Delegate:${this.getClass()}"
+	}
+	
+	//闭包
+	def test(Closure<Delegate> closure){
+		closure(this);
+	}
+}
+
+//3. Gradle 中闭包的常用写法
+
+task student{
+	configStudent{
+		println "当前it：${it}"
+		
+		name = "Groovy"
+		age = 10
+		getInfo()
+	}
+}
+
+class Student{
+	String name
+	int age
+	def getInfo(){
+		println "name is ${name}, age is ${age}"
+	}
+}
+
+def configStudent(Closure<Student> closure){
+	Student student = new Student()
+	//设置委托对象为当前创建的Student实例
+	closure.delegate = student
+	//设置委托模式优先，如果不设置闭包内方法的处理者是thisObject
+	closure.setResolveStrategy(Closure.DELEGATE_FIRST)
+	//设置it变量
+	closure(student)
+}
+

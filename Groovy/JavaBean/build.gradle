@@ -1,0 +1,31 @@
+task javaBean{
+	//Groovy中定义JavaBean
+	Student student = new Student()
+	student.name = "Groovy"
+	student.age = 10
+	
+	student.setName("Gradle")
+	println "名字是："+student.name
+	//不能调用Getter方法获取值
+//	println "名字是："+student.getName
+	println "年龄是：${student.age}"
+	println "分数是："+student.score
+}
+
+class Student{
+	private String name
+	private int age
+	//定义的Getter方法所对应的属性可以直接调用
+	public String getScore(){
+		100
+	}
+	
+	//属性的Getter、Setter方法
+	public String setName(String name){
+		this.name = name
+	}
+	
+	public void getName(){
+		name
+	}
+}

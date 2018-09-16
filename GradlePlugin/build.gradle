@@ -1,0 +1,48 @@
+//脚本插件的使用
+apply from: 'version.gradle'
+
+task taskVersion{
+    doLast{
+        println "版本是${versionName},版本号是${versionCode}"
+    }
+}
+
+////Map作为参数
+//apply plugin:'java'
+////闭包作为一个参数
+//apply{
+//    plugin 'java'
+//}
+////配置一个ObjectConfigurationAction
+//apply(new Action<ObjectConfigurationAction>() {
+//
+//    @Override
+//    void execute(ObjectConfigurationAction objectConfigurationAction) {
+//        objectConfigurationAction.plugin('java')
+//    }
+//})
+
+//plugins DSL 方式
+//plugins{
+//    id 'java'
+//}
+//如果第三方插件托管到https://plugins.gradle.org/,就不用在
+//buildscript中配置classpath了
+//plugins{
+//    id "插件id" version '插件版本号'
+//}
+
+//
+//task taskVersion{
+//    doLast{
+//        println "版本是${versionName},版本号是${versionCode}"
+//    }
+//}
+
+apply plugin: 'com.manu.plugin'
+
+buildscript{
+    dependencies{
+        classpath files('libs/plugin.jar')
+    }
+}

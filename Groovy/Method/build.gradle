@@ -1,0 +1,35 @@
+task method{
+	//方法调用
+	methodA(1, 2)
+	methodA 1, 2 
+	
+	//获取方法返回的结果
+	def a = methodA 10, 20
+	println '获取方法返回的结果：'+a
+	
+	//代码块作为参数传递
+	def list = [1,2,3,4,5];
+	list.each(
+		//闭包参数
+		{
+		//	println it
+		}
+	)
+	
+	//Groovy规定，如果方法的最后一个参数是闭包，可以直接放到方法外面
+	list.each(){
+	//	println it
+	}
+	
+	//简写方式
+	list.each{
+		println it
+	}
+}
+
+//方法的定义
+def methodA(int a, int b){
+	println a + b
+	//Groovy中return语句不是必须的，默认将最后一句代码的结果作为返回值
+	a + b
+}

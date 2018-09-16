@@ -1,0 +1,18 @@
+task stringTest{
+	//使用def关键字定义变量，
+	def str1 = "双引号"
+	def str2 = '单引号'
+	
+	println "双引号定义的字符串："+str1
+	println "双引号定义的字符串："+str1.class
+	println "单引号定义的字符串："+str2
+	
+	//变量动态变化
+	str1 = true;
+	println "双引号定义的字符串："+str1.class
+	
+	//
+	println "双引号定义的字符串：${str1}"
+	println "双引号定义的字符串：$str1"
+	println '单引号定义的字符串：$str2'
+}

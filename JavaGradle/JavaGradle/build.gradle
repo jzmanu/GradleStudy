@@ -1,0 +1,120 @@
+
+apply plugin : 'java'
+
+//sourceSets{
+//    //指定新的源代码集合
+//    vip{
+//
+//    }
+//}
+
+//sourceSets{
+//    //修改默认目录，下面还是和默认位置一样，如需配置其他目录修改即可
+//    main{
+//        java{
+//            srcDir 'src/java'
+//        }
+//
+//        resources{
+//            srcDir 'src/resources'
+//        }
+//
+//    }
+//}
+
+//设置某个源集的属性
+sourceSets{
+    main{
+        //源集名称只读
+        println name
+        //其他属性设置
+        //从4.0开始已经被过时。替代的是dir
+        output.classesDir = file("a/b")
+//        output.dir("a/b")
+        output.resourcesDir = file("a/b")
+        //....
+    }
+}
+
+//设置所有源集的属性
+sourceSets{
+
+}
+
+//配置仓库位置
+repositories{
+    //仓库类型如jcenter库、ivy库、maven中心库、maven本地库、maven私服库等
+    mavenCentral()
+    mavenLocal()
+    maven {
+        uri "http"//xxxx
+    }
+    jcenter()
+    google()
+    //...
+}
+
+//配置具体的依赖
+dependencies{
+    //依赖三要素：group(组别)、name(名称)、version(版本)
+    //分别对应Maven中的GAV(groupid、artifactid、version)
+
+    //完整写法
+    compile group: 'com.squareup.okhttp3', name: 'okhttp', version:'3.0.1'
+    //简写
+    compile 'com.squareup.okhttp3:okhttp:3.0.1'
+
+//    implementation ''
+//
+//    api ''
+//
+//    DependencyHandler
+}
+
+//为不同的源代码集合配置不同的依赖
+dependencies{
+    //配置格式：sourceSetCompile、sourceSetRuntime
+    mainCompile 'com.squareup.okhttp3:okhttp:3.0.1'
+    vipCompile 'com.squareup.okhttp3:okhttp:2.0.1'
+}
+
+//依赖一个子项目
+dependencies{
+    //setting.gradle文件中 include ':childProject'
+
+    //依赖子项目
+    compile project('childProject')
+}
+
+//依赖一个jar包
+dependencies{
+    //配置单个jar
+    compile file('libs/java1.jar')
+    //配置多个jar
+    compile files('libs/java1.jar','libs/java2.jar')
+    //批量配置jar,配置好jar所在路径，会将后缀为jar的所有文件依赖到项目中
+    compile fileTree(dir:'libs',include:'*.jar')
+}
+
+//子项目统一配置
+subprojects{
+    //配置子项目都使用Java Gradle插件
+    apply plugin: 'java'
+    //配置子项目都是用Maven中心库
+    repositories{
+        mavenCentral()
+    }
+    //其他通用配置
+    //...
+}
+//全部项目统一配置
+allprojects{
+    //配置所有项目都使用Java Gradle插件
+    apply plugin: 'java'
+    //配置所有项目都是用Maven中心库
+    repositories{
+        mavenCentral()
+    }
+    //其他通用配置
+    //...
+}

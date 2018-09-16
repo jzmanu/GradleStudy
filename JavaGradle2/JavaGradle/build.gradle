@@ -1,0 +1,57 @@
+/**
+ * 发布构件到项目文件夹/或mavenLocal()
+ */
+apply plugin : 'java'
+apply plugin : 'idea'
+apply plugin : 'eclipse'
+//生成jar的任务，类似于自定义wrapper
+task publishJar(type:Jar)
+//构件版本
+version '1.0.0'
+//构件通过artifacts{}闭包配置
+artifacts{
+    archives publishJar
+}
+//构件发布上传
+uploadArchives{
+    repositories{
+        flatDir{
+            name 'libs'
+            dirs "$projectDir/libs"
+        }
+        //将构建发布到mavenLocal()
+        mavenLocal()
+    }
+}
+
+
+///**
+// * 发布构件到maven私服
+// */
+//apply plugin : 'java'
+//apply plugin : 'maven'
+////生成jar的任务，类似于自定义wrapper
+//task publishJar(type:Jar)
+////构件版本
+//version '1.0.0'
+////构件通过artifacts{}闭包配置
+//artifacts{
+//    archives publishJar
+//}
+////构件发布上传
+//uploadArchives{
+//    repositories{
+//        mavenDeployer{
+//            repository(url:'http://xxx'){
+//                //仓库用户名和密码
+//                authentication(userName:'username',password:'pass')
+//            }
+//            snapshotRepository(url:'http://xxx'){
+//                authentication(userName:'username',password:'pass')
+//            }
+//        }
+//    }
+//}
+
+
+

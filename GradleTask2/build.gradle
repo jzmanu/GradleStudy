@@ -1,0 +1,107 @@
+//任务执行流程分析
+def Task taskA = task taskB(type: CustomTask)
+taskA.doFirst {
+    println "Task执行之前调用：doFirst"
+}
+
+taskA.doLast {
+    println "Task执行之后调用：doLast"
+}
+
+class CustomTask extends DefaultTask{
+    @TaskAction
+    def doSelf(){
+        println "Task执行本身调用：doSelf"
+    }
+}
+
+/**
+ * 任务顺序
+ * taskC.shouldRunAfter(taskD)：表示taskC要在taskD的后面执行
+ * taskC.mustRunAfter(taskD)：表示taskC必须要在taskD的后面执行
+ */
+task taskC  {
+    doFirst{
+        println "taskC"
+    }
+}
+task taskD  {
+    doFirst{
+        println "taskD"
+    }
+}
+taskC.shouldRunAfter(taskD)
+
+
+//任务的onlyIf断言
+final String BUILD_ALL = 'all'
+final String BUILD_FIRST = 'first'
+final String BUILD_OTHERS = 'others'
+
+task taskTencentRelease{
+    doLast{
+        println "打应用宝渠道包"
+    }
+}
+
+task taskBaiduRelease{
+    doLast{
+        println "打百度手机助手渠道包"
+    }
+}
+
+task taskMiuiRelease{
+    doLast{
+        println "打小米应用商店渠道包"
+    }
+}
+
+task buildTask{
+    group BasePlugin.BUILD_GROUP
+    description "打渠道包"
+}
+
+//为buildTask添加依赖的具体任务
+buildTask.dependsOn taskTencentRelease, taskBaiduRelease, taskMiuiRelease
+
+taskTencentRelease.onlyIf{
+    if (project.hasProperty("buildApp")){
+        Object buildApp = project.property("buildApp")
+        return BUILD_ALL == buildApp || BUILD_FIRST == buildApp
+    }else{
+        return true
+    }
+}
+
+taskBaiduRelease.onlyIf{
+    if (project.hasProperty("buildApp")){
+        Object buildApp = project.property("buildApp")
+        return BUILD_ALL == buildApp || BUILD_FIRST == buildApp
+    }else{
+        return true
+    }
+}
+
+taskMiuiRelease.onlyIf{
+    if (project.hasProperty("buildApp")){
+        Object buildApp = project.property("buildApp")
+        return BUILD_OTHERS == buildApp || BUILD_ALL == buildApp
+    }else{
+        return true
+    }
+}
+
+//任务规则
+tasks.addRule("对该规则的一个描述"){
+    //在闭包中常常将->作为参数与代码块之间的分隔符
+    String taskName ->
+        task(taskName) {
+            doLast{
+                println "${taskName} 不存在"
+            }
+        }
+}
+
+task taskTest{
+    dependsOn taskA
+}

@@ -1,0 +1,35 @@
+task list{
+	//定义List
+	def list = [1,2,3,4,5,6];
+	def weekList = ['星期一','星期二','星期三','星期四','星期五','星期六','星期日'];
+	println "list的类型："+list.class
+	println "weekList的类型："+weekList.class
+	
+	//访问集合里面的元素
+	println '第一个元素：'+list[0]//访问第一个元素
+	println '第二个元素：'+list[1]//访问第二个元素，以此类推
+	
+	println '最后一个元素：'+list[-1]//访问最后一个元素
+	println '倒数第二个元素：'+list[-2]//访问倒数第二个元素，以此类推
+	println '某个范围内元素：'+list[2..4]//访问某个范围内元素，以此类推
+	
+	//使用each遍历集合中的元素
+	weekList.each{
+		//使用it作为迭代的元素变量，不能写错喔
+		println it
+	}
+	
+	//定义Map
+	def map = ['name':'Groovy', 'age':10];
+	println "map的类型："+map.getClass().name;
+	
+	//访问Map里面的元素
+	println map.name;
+	println map['name'];
+	
+	//遍历Map中的元素
+	map.each{
+		println "Key:${it.key},value:${it.value}"
+	}
+	
+}

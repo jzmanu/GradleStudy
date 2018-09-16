@@ -1,0 +1,116 @@
+task testGradleSetting{
+//	println 'testGradleSetting'
+}
+
+//配置子项目依赖的仓库
+subprojects{
+	repositories{
+		jcenter()
+	}
+}
+
+//配置全部项目
+allprojects{
+
+}
+
+//1. 创建一个任务
+task createTask{
+	doFirst{
+		println 'doFirst'
+	}
+
+	doLast{
+		println 'doLast'
+	}
+}
+
+//2. 使用TaskContainer创建一个任务,Project已经定义的TaskContainer,即tasks
+tasks.create("createTask1"){
+	doFirst{
+		println 'doFirst'
+	}
+
+	doLast{
+		println 'doLast'
+	}
+}
+
+task A{
+	doFirst{
+		println 'A'
+	}
+}
+
+//单任务依赖：通过dependsOn指定要依赖的任务
+task B(dependsOn: A){
+	doFirst{
+		println 'B'
+	}
+}
+
+task C{
+	doFirst{
+		println 'C'
+	}
+}
+
+//多任务依赖
+task D{
+	dependsOn A, C
+	doFirst{
+		println 'D'
+	}
+}
+
+//任务之间的交互
+//task E{
+//	println 'hello e'
+//	println "E是不是Project的属性："+project.hasProperty('E')
+//}
+
+//E.doFirst{
+//	println 'doFirst'
+//}
+//
+//E.doLast{
+//	println 'doLast'
+//}
+
+apply plugin:"java"
+
+//自定义单个属性
+ext.name1 = "Gradle"
+//自定义多个属性
+ext{
+	age = 10
+	score = 100
+}
+
+//在SourceSet中使用自定义属性
+sourceSets.all{
+	ext.resourceDir = null
+}
+
+//配置自定义属性
+sourceSets{
+	main{
+		resourceDir = "main/res"
+	}
+	test{
+		resourceDir = "test/res"
+	}
+}
+
+task customProperty{
+	println "name=${name1}"
+	println "age=${age}"
+	println "score=${score}"
+
+	sourceSets.each {
+		println "${it.name} resourceDir is ${it.resourceDir}"
+	}
+}
+
+
+
